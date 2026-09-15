@@ -2,12 +2,10 @@ package dev.dutchy.runelite.libs.ui.image;
 
 import dev.dutchy.runelite.libs.ui.item.ItemId;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
 @Value
-@Accessors(fluent = true)
 public class ItemImageRequest {
     ItemId itemId;
     int quantity;

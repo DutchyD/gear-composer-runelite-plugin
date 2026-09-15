@@ -3,7 +3,6 @@ package dev.dutchy.runelite.gear.bank;
 import dev.dutchy.runelite.gear.content.ItemQuantityFormat;
 import dev.dutchy.runelite.libs.ui.item.ItemId;
 import lombok.Value;
-import lombok.experimental.Accessors;
 import net.runelite.api.Client;
 import net.runelite.api.MenuAction;
 import net.runelite.api.MenuEntry;
@@ -30,7 +29,6 @@ public final class VariantSwitchMenu {
 
     /** One entry: the words to show and the stack it would draw. */
     @Value
-    @Accessors(fluent = true)
     public static class Entry {
         String target;
         ItemId id;

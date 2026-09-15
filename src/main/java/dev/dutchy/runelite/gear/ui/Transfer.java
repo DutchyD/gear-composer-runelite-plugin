@@ -4,8 +4,6 @@ import dev.dutchy.runelite.gear.*;
 import dev.dutchy.runelite.gear.persistence.Backup;
 import dev.dutchy.runelite.gear.persistence.BookFormatException;
 import dev.dutchy.runelite.gear.persistence.BookMerger;
-import dev.dutchy.runelite.gear.share.Clipboard;
-import dev.dutchy.runelite.gear.share.ShareCodec;
 import dev.dutchy.runelite.gear.transfer.BookTransfer;
 import dev.dutchy.runelite.gear.transfer.FileDialogs;
 
@@ -14,11 +12,9 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.Supplier;
 
 /**
- * Setups coming in and going out: files, backups and share codes. Every failure is reported rather
+ * Setups coming in and going out: files and backups. Every failure is reported rather
  * than thrown, because there is nowhere above here for it to go.
  */
 public final class Transfer {
@@ -33,17 +29,12 @@ public final class Transfer {
 
         void showBackups(List<Backup> backups);
 
-        /** A setup off a share code, to be put in a section the player picks. */
-        void showShared(GearSetup shared);
-
         void backToList();
     }
 
     private final GearSetupBook book;
     private final BookTransfer books;
     private final FileDialogs dialogs;
-    private final ShareCodec shareCodec;
-    private final Clipboard clipboard;
 
     private Prompts prompts = SilentPrompts.INSTANCE;
     private Pages pages = new Pages() {
@@ -56,29 +47,21 @@ public final class Transfer {
         }
 
         @Override
-        public void showShared(GearSetup shared) {
-        }
-
-        @Override
         public void backToList() {
         }
     };
-    private Supplier<Owner> owner = Owner::shared;
 
     @Inject
-    public Transfer(GearSetupBook book, BookTransfer books, FileDialogs dialogs, ShareCodec shareCodec, Clipboard clipboard) {
+    public Transfer(GearSetupBook book, BookTransfer books, FileDialogs dialogs) {
         this.book = Objects.requireNonNull(book, "book");
         this.books = Objects.requireNonNull(books, "books");
         this.dialogs = Objects.requireNonNull(dialogs, "dialogs");
-        this.shareCodec = Objects.requireNonNull(shareCodec, "shareCodec");
-        this.clipboard = Objects.requireNonNull(clipboard, "clipboard");
     }
 
     /** Wired by the sidebar, which owns the dialogs, the pages and whose list is on show. */
-    void shownBy(Prompts newPrompts, Pages newPages, Supplier<Owner> ownerForNewSetups) {
+    void shownBy(Prompts newPrompts, Pages newPages) {
         this.prompts = Objects.requireNonNull(newPrompts, "newPrompts");
         this.pages = Objects.requireNonNull(newPages, "newPages");
-        this.owner = Objects.requireNonNull(ownerForNewSetups, "ownerForNewSetups");
     }
 
     public void importFile() {
@@ -143,31 +126,5 @@ public final class Transfer {
         } catch (BookFormatException | UncheckedIOException e) {
             prompts.say("That backup could not be read: " + e.getMessage());
         }
-    }
-
-    public void copyShareCode(GearSetup setup) {
-        clipboard.copy(shareCodec.encode(setup));
-        prompts.say("Copied a share code for " + setup.name());
-    }
-
-    /** Reads a code off the clipboard, saying so when there is none or it is broken. */
-    public void pasteShareCode() {
-        Optional<String> text = clipboard.paste().filter(ShareCodec::looksLikeCode);
-        if (text.isEmpty()) {
-            prompts.say("The clipboard holds no share code");
-            return;
-        }
-        try {
-            pages.showShared(shareCodec.decode(text.get()));
-        } catch (BookFormatException e) {
-            prompts.say(e.getMessage());
-        }
-    }
-
-    /** A shared setup belongs to whoever is looking at the list it lands in. */
-    public void addShared(GearSetup shared, SectionId into) {
-        book.addSetup(into, shared.withOwner(owner.get()));
-        pages.backToList();
-        prompts.announce("Added " + shared.name());
     }
 }

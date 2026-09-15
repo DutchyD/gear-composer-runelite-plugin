@@ -5,7 +5,6 @@ import dev.dutchy.runelite.gear.content.VariantId;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.time.Instant;
 import java.util.Objects;
@@ -13,7 +12,6 @@ import java.util.Optional;
 
 /** What one variant's items looked like before a change, and what caused the change. */
 @Value
-@Accessors(fluent = true)
 public class SetupRevision {
     Instant at;
     String cause;

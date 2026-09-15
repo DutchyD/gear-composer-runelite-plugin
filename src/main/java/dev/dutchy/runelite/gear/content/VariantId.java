@@ -1,14 +1,12 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 import java.util.UUID;
 
 /** A variant's stable identity, so a pointer to it survives reordering, renaming and deletion. */
 @Value
-@Accessors(fluent = true)
 public class VariantId {
     UUID value;
 

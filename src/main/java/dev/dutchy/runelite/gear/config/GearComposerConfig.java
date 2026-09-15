@@ -8,9 +8,7 @@ import net.runelite.client.config.*;
 public interface GearComposerConfig extends Config {
 
     String GROUP = "gearcomposer";
-    String ONBOARDING_DISMISSED = "onboardingDismissed";
     String TILE_STYLE = "tileStyle";
-    String COMPLETED_GUIDES = "completedGuides";
     String KNOWN_ACCOUNTS = "knownAccounts";
 
     @ConfigItem(
@@ -132,38 +130,11 @@ public interface GearComposerConfig extends Config {
     }
 
     @ConfigItem(
-            keyName = "shareLedger",
-            name = "Ledger on shared setups",
-            description = "Include value, weight and stats when sharing as an image or text",
-            position = 15)
-    default boolean shareLedger() {
-        return true;
-    }
-
-    @ConfigItem(
-            keyName = COMPLETED_GUIDES,
-            name = "Completed guides",
-            description = "Which guides have been run to the end",
-            hidden = true)
-    default String completedGuides() {
-        return "";
-    }
-
-    @ConfigItem(
             keyName = KNOWN_ACCOUNTS,
             name = "Known accounts",
             description = "Character names seen so far, by profile key",
             hidden = true)
     default String knownAccounts() {
         return "";
-    }
-
-    @ConfigItem(
-            keyName = ONBOARDING_DISMISSED,
-            name = "Onboarding dismissed",
-            description = "Whether the getting-started card has been closed",
-            hidden = true)
-    default boolean onboardingDismissed() {
-        return false;
     }
 }

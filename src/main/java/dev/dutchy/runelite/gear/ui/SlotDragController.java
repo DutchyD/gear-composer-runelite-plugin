@@ -6,7 +6,6 @@ import dev.dutchy.runelite.gear.content.SlotRef;
 import dev.dutchy.runelite.libs.ui.image.ImageTransforms;
 import dev.dutchy.runelite.libs.ui.item.ResolvedItem;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -29,7 +28,6 @@ final class SlotDragController {
     }
 
     @Value
-    @Accessors(fluent = true)
     static class FromSlot implements Payload {
         SlotView view;
 
@@ -40,7 +38,6 @@ final class SlotDragController {
     }
 
     @Value
-    @Accessors(fluent = true)
     static class FromSearch implements Payload {
         ResolvedItem resolved;
 

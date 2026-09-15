@@ -1,3 +1,4 @@
+
 package dev.dutchy.runelite.gear.ui;
 
 import dev.dutchy.runelite.gear.content.DividerChange;
@@ -42,8 +43,4 @@ interface ContentActions extends VariantActions {
     void showHistory();
 
     void back();
-
-    void compare();
-
-    void share();
 }

@@ -20,7 +20,6 @@ public enum HelpTopic {
     SETUP_TILE("Setup tile", "Left-click shows the setup in the bank. Right-click opens its menu with edit, variants, duplicate, pin, hotkey, share and delete."),
     NEW_SECTION("New section", "Adds a section at the bottom. Sections can nest one level deep from their menu."),
     STATUS_LINE("Status line", "Says what just happened, and offers Undo for a few seconds after a change."),
-    GUIDES("Guides", "Every guide and tutorial, with a tick beside the ones you have completed."),
 
     // editor
     EDITOR_PAGE("Setup editor", "Name, layout type and the details shown on the setup's tile and page."),
@@ -44,7 +43,6 @@ public enum HelpTopic {
     BANK_SIDES("Two sides", "A Bank Layout is two inventories: the left side and the right side of the bank."),
     VARIANTS("Variants", "Every version of this setup, such as Budget or Best-in-slot, with a preview of each. The lit one is shown below and in the bank; click another to show it, right-click for more. In the bank the variants sit as tabs above the layout; the arrows or the mouse wheel scroll them when there are many."),
     VARIANT_TOOLS("Variant tools", "Start a new variant as a copy, empty, or from what you wear; fold the list away when you are done."),
-    LEDGER("Ledger", "Total value, carried weight and worn bonuses, recomputed on every edit."),
     LAYOUT_MAP("Layout map", "The custom grid in its real shape. Click a cell to jump to it below."),
     ROW_TABS("Row tabs", "One tab per row of the grid; only the chosen row's two cells are shown below."),
     CELL("Cell", "One cell of the grid: an equipment set or an inventory, with its own name and menu."),
@@ -79,16 +77,10 @@ public enum HelpTopic {
     BANK_LEAVING("Back to the bank", "Clicking a tab, searching, or closing the bank turns the setup off again."),
 
     // other pages
-    COMPARE_PAGE("Compare", "Slot-by-slot differences against another setup or against what you wear, with the value and stat deltas."),
-    COMPARE_TARGETS("Against", "Pick which setup to compare with. Worn now uses what you are wearing and carrying."),
-    SHARE_PAGE("Share", "Save the setup as a picture, or copy it as an image or text."),
-    SHARE_LEDGER("Include", "Whether value, weight and stats go along with the picture or text."),
-    SHARE_ACTIONS("Share actions", "Save image writes a PNG to the screenshots folder. Copy puts it on the clipboard."),
     HISTORY_PAGE("History", "Earlier versions of this setup, newest first. Restore brings one back."),
     HOTKEY_PAGE("Hotkey", "Press the key combination that should show this setup in the bank."),
     IMPORT_PAGE("Import", "Setups read from a file, added beside what you already have."),
     BACKUPS_PAGE("Backups", "Rolling copies of your whole book, taken as you make changes. Restore replaces the book."),
-    SHARE_CODE_PAGE("Share code", "A setup pasted from a share code. Pick the section it goes in."),
     CELL_SOURCE_PAGE("Fill from setup", "Every equipment set or inventory in your book that fits this cell. The items are copied."),
 
     // tutorials

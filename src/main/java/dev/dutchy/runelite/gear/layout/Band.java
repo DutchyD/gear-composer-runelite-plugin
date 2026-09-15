@@ -1,14 +1,12 @@
 package dev.dutchy.runelite.gear.layout;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /** A horizontal strip of the layout: the blocks that sit side by side, and the rows they take together. */
 @Value
-@Accessors(fluent = true)
 public class Band {
     int index;
     List<LayoutBlock> blocks;

@@ -1,7 +1,6 @@
 package dev.dutchy.runelite.gear;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Collections;
 import java.util.EnumSet;
@@ -10,7 +9,6 @@ import java.util.Set;
 
 /** What a setup needs beyond items: a spellbook and the quick prayers to have set. */
 @Value
-@Accessors(fluent = true)
 public class Requirements {
     Spellbook spellbook;
     Set<Prayer> quickPrayers;

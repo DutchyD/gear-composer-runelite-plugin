@@ -2,13 +2,11 @@ package dev.dutchy.runelite.gear.account;
 
 import dev.dutchy.runelite.gear.Owner;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
 /** One card on the accounts screen: an owner, what to call it, how many setups it holds, and whether it is logged in. */
 @Value
-@Accessors(fluent = true)
 public class AccountEntry {
     Owner owner;
     String name;

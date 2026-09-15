@@ -15,12 +15,7 @@ import dev.dutchy.runelite.gear.content.DropRule;
 import dev.dutchy.runelite.gear.history.FileHistoryStore;
 import dev.dutchy.runelite.gear.history.HistoryStore;
 import dev.dutchy.runelite.gear.history.SetupHistory;
-import dev.dutchy.runelite.gear.ledger.ItemFactsSource;
 import dev.dutchy.runelite.gear.requirements.RequirementWatch;
-import dev.dutchy.runelite.gear.share.Clipboard;
-import dev.dutchy.runelite.gear.share.ImageSink;
-import dev.dutchy.runelite.gear.share.ShareService;
-import dev.dutchy.runelite.gear.share.SystemClipboard;
 import dev.dutchy.runelite.gear.transfer.BookTransfer;
 import dev.dutchy.runelite.gear.transfer.FileDialogs;
 import dev.dutchy.runelite.gear.transfer.SwingFileDialogs;
@@ -68,7 +63,6 @@ final class SessionModule extends AbstractModule {
         bind(PageParts.class).in(Singleton.class);
         bind(BulkDelete.class).in(Singleton.class);
         bind(Transfer.class).in(Singleton.class);
-        bind(GuideSamples.class).in(Singleton.class);
         bind(Accounts.class).in(Singleton.class);
         bind(SectionCommands.class).in(Singleton.class);
         bind(SetupCommands.class).in(Singleton.class);
@@ -92,17 +86,5 @@ final class SessionModule extends AbstractModule {
     @Singleton
     FileDialogs fileDialogs() {
         return new SwingFileDialogs(null, dataDir.toFile());
-    }
-
-    @Provides
-    @Singleton
-    Clipboard clipboard() {
-        return new SystemClipboard();
-    }
-
-    @Provides
-    @Singleton
-    ShareService shareService(ItemIconFactory icons, ItemFactsSource facts, ImageSink images, Clipboard clipboard) {
-        return new ShareService(icons.loader(), facts, images, clipboard);
     }
 }

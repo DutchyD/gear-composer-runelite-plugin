@@ -2,7 +2,6 @@ package dev.dutchy.runelite.gear.bank;
 
 import dev.dutchy.runelite.libs.ui.item.ItemId;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +13,10 @@ import java.util.Optional;
  * drawn, the rest are the other doses or charges the player could switch to.
  */
 @Value
-@Accessors(fluent = true)
 public class SlotSupply {
 
     /** One held stack of one family member. */
     @Value
-    @Accessors(fluent = true)
     public static class Stack {
         ItemId id;
         int count;

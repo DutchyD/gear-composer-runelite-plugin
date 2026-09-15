@@ -1,7 +1,6 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +8,6 @@ import java.util.Objects;
 
 /** A grid of cells two wide and one to three tall, each an equipment set, an inventory, or nothing. */
 @Value
-@Accessors(fluent = true)
 public class CustomContent implements SetupContent {
     int rows;
     List<LayoutCell> cells;

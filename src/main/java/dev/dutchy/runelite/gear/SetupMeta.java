@@ -1,7 +1,6 @@
 package dev.dutchy.runelite.gear;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Locale;
 import java.util.Objects;
@@ -11,7 +10,6 @@ import java.util.stream.Collectors;
 
 /** Everything about a setup that is not its items: pinning, colour, tags, notes, requirements, hotkey. */
 @Value
-@Accessors(fluent = true)
 public class SetupMeta {
     boolean pinned;
     ColourLabel label;

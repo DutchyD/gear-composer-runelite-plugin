@@ -5,7 +5,6 @@ import dev.dutchy.runelite.gear.Prayer;
 import dev.dutchy.runelite.gear.Requirements;
 import dev.dutchy.runelite.gear.content.*;
 import dev.dutchy.runelite.gear.guide.HelpTopic;
-import dev.dutchy.runelite.gear.ledger.ItemFactsSource;
 import dev.dutchy.runelite.libs.ui.icon.ItemIconFactory;
 import dev.dutchy.runelite.libs.ui.item.ResolvedItem;
 import dev.dutchy.runelite.libs.ui.selector.ItemRowDragListener;
@@ -39,7 +38,6 @@ final class SetupContentPanel extends JPanel implements SlotView.Listener {
     private final JPanel selectionStrip = Ui.panel(new BorderLayout(Ui.SMALL_GAP, 0));
     private final JLabel selectionCount = Ui.body("");
     private final FlatButton pasteButton;
-    private final LedgerView ledger;
     private final ContentBody body;
     private final VariantsPanel variants;
 
@@ -51,7 +49,6 @@ final class SetupContentPanel extends JPanel implements SlotView.Listener {
                       DropRule dropRule,
                       ContentActions actions,
                       CellActions cellActions,
-                      ItemFactsSource facts,
                       ContentViewState view) {
         Objects.requireNonNull(setup, "setup");
         Objects.requireNonNull(view, "view");
@@ -60,8 +57,6 @@ final class SetupContentPanel extends JPanel implements SlotView.Listener {
         SetupContent content = setup.variantAt(editing).map(SetupVariant::content).orElse(setup.content());
         this.actions = Objects.requireNonNull(actions, "actions");
         Objects.requireNonNull(cellActions, "cellActions");
-        Objects.requireNonNull(facts, "facts");
-        this.ledger = Help.anchor(new LedgerView(content, facts, false), HelpTopic.LEDGER);
         Help.anchor(this, HelpTopic.CONTENTS_PAGE);
         this.drags = new SlotDragController(this, this::slotAt, dropRule, actions);
         this.pasteButton = new FlatButton("Paste", "Put copied items down from the first selected slot (Ctrl+V)", this::pasteSelection);
@@ -78,7 +73,7 @@ final class SetupContentPanel extends JPanel implements SlotView.Listener {
         finderStrip = finderStrip();
 
         body = ContentBody.of(content, icons, Objects.requireNonNull(artwork, "artwork"), this, actions, cellActions);
-        variants = new VariantsPanel(setup, editing, icons, facts, actions, view.variantsOpen());
+        variants = new VariantsPanel(setup, editing, icons, actions, view.variantsOpen());
 
         JPanel header = Ui.panel(new BorderLayout(0, Ui.SMALL_GAP));
         header.setBorder(BorderFactory.createEmptyBorder(0, 0, Ui.SMALL_GAP, 0));
@@ -86,7 +81,7 @@ final class SetupContentPanel extends JPanel implements SlotView.Listener {
         header.add(Ui.column(Ui.SMALL_GAP, variants, toolbar(body.toolbarAction().orElse(null)), notesLine(setup), requirementsLine(setup.meta().requirements()),
                 finderStrip, selectionStrip()), BorderLayout.CENTER);
 
-        JPanel middle = Ui.column(0, body, ledger);
+        JPanel middle = Ui.column(0, body);
         add(header, BorderLayout.NORTH);
         add(middle, BorderLayout.CENTER);
         installShortcuts();
@@ -96,31 +91,18 @@ final class SetupContentPanel extends JPanel implements SlotView.Listener {
 
     /** Where the page is looking now, to carry over to the page that replaces it. */
     ContentViewState viewState() {
-        return body.remember(ContentViewState.initial()).withVariantsOpen(variants.isOpen()).withLedgerOpen(ledger.isOpen())
+        return body.remember(ContentViewState.initial()).withVariantsOpen(variants.isOpen())
                 .withFinder(finderStrip.isVisible(), finder.query());
     }
 
     private void show(ContentViewState view) {
         body.show(view);
-        if (view.ledgerOpen() != ledger.isOpen()) {
-            ledger.setOpen(view.ledgerOpen());
-        }
         if (view.finderOpen()) {
             finderStrip.setVisible(true);
             if (!view.finderQuery().isBlank()) {
                 finder.setQuery(view.finderQuery());
             }
         }
-    }
-
-    LedgerView ledger() {
-        return ledger;
-    }
-
-    /** Recomputes every total on the page, as when item facts arrive. */
-    void refreshLedger() {
-        ledger.refresh();
-        variants.refresh();
     }
 
     VariantsPanel variants() {
@@ -353,10 +335,8 @@ final class SetupContentPanel extends JPanel implements SlotView.Listener {
         JPanel bar = NavBar.create(setup.name(), actions::back);
         JPanel tools = Ui.panel(new FlowLayout(FlowLayout.RIGHT, 2, 0));
         FlatButton find = new FlatButton(ActionIcon.SEARCH, "Find items to drag into slots", this::toggleFinder);
-        FlatButton compare = new FlatButton(ActionIcon.GRID, "Compare with another setup or with what you wear", actions::compare);
-        FlatButton share = new FlatButton(ActionIcon.COPY, "Share as an image or text", actions::share);
         FlatButton history = new FlatButton(ActionIcon.CLOCK, "Earlier versions of this setup", actions::showHistory);
-        for (FlatButton button : List.of(find, compare, share, history)) {
+        for (FlatButton button : List.of(find, history)) {
             button.setPreferredSize(new Dimension(24, 24));
             tools.add(button);
         }

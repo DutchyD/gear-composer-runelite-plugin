@@ -3,7 +3,6 @@ package dev.dutchy.runelite.gear.bank;
 import dev.dutchy.runelite.gear.content.SetupItem;
 import dev.dutchy.runelite.libs.ui.item.ItemId;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -13,7 +12,6 @@ import java.util.Optional;
  * the slot a placeholder.
  */
 @Value
-@Accessors(fluent = true)
 public class BankSlotPlan {
     int slotIndex;
     SetupItem item;

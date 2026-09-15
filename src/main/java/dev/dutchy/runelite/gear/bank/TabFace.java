@@ -1,13 +1,11 @@
 package dev.dutchy.runelite.gear.bank;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
 /** One variant tab in the strip, with its name already escaped for the game's renderer. */
 @Value
-@Accessors(fluent = true)
 public class TabFace {
     String name;
     int variant;

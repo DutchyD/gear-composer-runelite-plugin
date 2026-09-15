@@ -3,7 +3,6 @@ package dev.dutchy.runelite.gear.layout;
 import dev.dutchy.runelite.gear.content.ItemGrid;
 import dev.dutchy.runelite.gear.content.TextAlign;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
@@ -12,7 +11,6 @@ import java.util.Objects;
  * the header strip of the row it heads, across the columns it spans.
  */
 @Value
-@Accessors(fluent = true)
 public class LayoutLabel {
     BankSide side;
     int row;

@@ -3,7 +3,6 @@ package dev.dutchy.runelite.gear.ui;
 import dev.dutchy.runelite.gear.SectionId;
 import dev.dutchy.runelite.gear.SetupId;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
@@ -19,7 +18,6 @@ public interface BulkTarget {
     }
 
     @Value
-    @Accessors(fluent = true)
     class Section implements BulkTarget {
         SectionId id;
 
@@ -31,7 +29,6 @@ public interface BulkTarget {
     }
 
     @Value
-    @Accessors(fluent = true)
     class Setup implements BulkTarget {
         SetupId id;
 

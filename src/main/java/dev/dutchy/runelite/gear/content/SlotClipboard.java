@@ -1,19 +1,16 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 import java.util.List;
 import java.util.Objects;
 
 /** Items lifted from slots, with where they came from so equipment goes back to matching slots. */
 @Value
-@Accessors(fluent = true)
 public class SlotClipboard {
     List<Entry> entries;
 
 
     @Value
-    @Accessors(fluent = true)
     public static class Entry {
         SlotRef from;
         SetupItem item;

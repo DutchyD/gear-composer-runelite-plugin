@@ -2,7 +2,6 @@ package dev.dutchy.runelite.gear.content;
 
 import dev.dutchy.runelite.libs.ui.item.ItemId;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,6 @@ import java.util.OptionalInt;
  * share the item's match rule.
  */
 @Value
-@Accessors(fluent = true)
 public class SetupItem {
     ItemId id;
     int amount;

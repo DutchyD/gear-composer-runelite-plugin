@@ -3,7 +3,6 @@ package dev.dutchy.runelite.gear;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.List;
 import java.util.Objects;
@@ -11,7 +10,6 @@ import java.util.Optional;
 
 /** A named run of setups; a section may sit one level under another, read through {@link #parent()}. */
 @Value
-@Accessors(fluent = true)
 public class GearSection {
     SectionId id;
     String name;

@@ -14,21 +14,15 @@ import dev.dutchy.runelite.gear.account.RuneLiteAccount;
 import dev.dutchy.runelite.gear.bank.*;
 import dev.dutchy.runelite.gear.config.*;
 import dev.dutchy.runelite.gear.content.EquipmentSlots;
-import dev.dutchy.runelite.gear.guide.GuideProgress;
-import dev.dutchy.runelite.gear.guide.SampleSetups;
 import dev.dutchy.runelite.gear.items.*;
-import dev.dutchy.runelite.gear.ledger.ItemFactsSource;
 import dev.dutchy.runelite.gear.persistence.*;
 import dev.dutchy.runelite.gear.player.PlayerItems;
 import dev.dutchy.runelite.gear.player.RuneLiteEquipmentSlots;
-import dev.dutchy.runelite.gear.player.RuneLiteItemFacts;
 import dev.dutchy.runelite.gear.player.RuneLitePlayerItems;
 import dev.dutchy.runelite.gear.requirements.CurrentQuickPrayers;
 import dev.dutchy.runelite.gear.requirements.CurrentSpellbook;
 import dev.dutchy.runelite.gear.requirements.RuneLiteQuickPrayers;
 import dev.dutchy.runelite.gear.requirements.RuneLiteSpellbook;
-import dev.dutchy.runelite.gear.share.ImageSink;
-import dev.dutchy.runelite.gear.share.RuneLiteImageSink;
 import dev.dutchy.runelite.gear.ui.*;
 import dev.dutchy.runelite.libs.ui.ItemUiModule;
 import lombok.extern.slf4j.Slf4j;
@@ -89,7 +83,6 @@ public class GearComposerPlugin extends Plugin {
         binder.bind(SetupTypeArtwork.class).to(RuneLiteSetupTypeArtwork.class);
         binder.bind(PlayerItems.class).to(RuneLitePlayerItems.class);
         binder.bind(ItemVariants.class).to(RuneLiteItemVariants.class);
-        binder.bind(Onboarding.class).to(ConfigOnboarding.class);
         binder.bind(CurrentAccount.class).to(RuneLiteAccount.class);
         binder.bind(EquipmentSlots.class).to(RuneLiteEquipmentSlots.class);
         binder.bind(CurrentSpellbook.class).to(RuneLiteSpellbook.class);
@@ -97,12 +90,9 @@ public class GearComposerPlugin extends Plugin {
         binder.bind(ItemNotes.class).to(RuneLiteItemNotes.class);
         binder.bind(ItemCharges.class).to(RuneLiteItemCharges.class);
         binder.bind(ViewSettings.class).to(ConfigViewSettings.class);
-        binder.bind(ItemFactsSource.class).to(RuneLiteItemFacts.class);
-        binder.bind(GuideProgress.class).to(ConfigGuideProgress.class);
         binder.bind(PrayerArtwork.class).to(RuneLitePrayerArtwork.class);
         binder.bind(EquipmentSlotArtwork.class).to(RuneLiteEquipmentSlotArtwork.class);
         binder.bind(AccountDirectory.class).to(ConfigAccountDirectory.class);
-        binder.bind(ImageSink.class).to(RuneLiteImageSink.class);
         binder.bind(Dispatch.class).to(SwingDispatch.class);
     }
 
@@ -110,23 +100,11 @@ public class GearComposerPlugin extends Plugin {
     protected void startUp() {
         GearSetupBook book = new GearSetupBook(new SwingDispatch());
         persistence.restore(book);
-        removeLeftoverSamples(book);
         session = getInjector().createChildInjector(new SessionModule(book, DATA_DIR)).getInstance(GearComposerSession.class);
         session.start();
         log.debug("Gear Composer started");
     }
 
-    /** A tutorial that never finished, say because the client closed, leaves its sample behind; it goes on the next start. */
-    private static void removeLeftoverSamples(GearSetupBook book) {
-        List<SetupId> leftovers = book.sections().stream()
-                .flatMap(section -> section.setups().stream())
-                .filter(SampleSetups::isSample)
-                .map(GearSetup::id)
-                .collect(Collectors.toList());
-        if (!leftovers.isEmpty()) {
-            book.deleteAll(List.of(), leftovers);
-        }
-    }
 
     @Override
     protected void shutDown() {

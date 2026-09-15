@@ -3,7 +3,6 @@ package dev.dutchy.runelite.gear.bank;
 import dev.dutchy.runelite.gear.GearSetup;
 import dev.dutchy.runelite.gear.content.SetupVariant;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.List;
 import java.util.Objects;
@@ -14,7 +13,6 @@ import java.util.stream.Collectors;
  * lit. Up to four share the strip's width; more than that scroll between a pair of arrows.
  */
 @Value
-@Accessors(fluent = true)
 public class VariantTabs {
 
     public static final VariantTabs NONE = new VariantTabs(List.of(), 0);

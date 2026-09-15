@@ -1,14 +1,12 @@
 package dev.dutchy.runelite.libs.ui.style;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 import net.runelite.client.ui.ColorScheme;
 
 import java.awt.*;
 import java.util.Objects;
 
 @Value
-@Accessors(fluent = true)
 public class ItemButtonStyle {
     Dimension size;
     Insets padding;

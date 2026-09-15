@@ -3,7 +3,6 @@ package dev.dutchy.runelite.gear.ui;
 import dev.dutchy.runelite.gear.GearSetup;
 import dev.dutchy.runelite.gear.content.SetupVariant;
 import dev.dutchy.runelite.gear.guide.HelpTopic;
-import dev.dutchy.runelite.gear.ledger.ItemFactsSource;
 import dev.dutchy.runelite.libs.ui.icon.ItemIconFactory;
 import net.runelite.client.ui.ColorScheme;
 
@@ -30,7 +29,7 @@ final class VariantsPanel extends JPanel {
     private final FlatButton add;
     private boolean open;
 
-    VariantsPanel(GearSetup setup, int editing, ItemIconFactory icons, ItemFactsSource facts, VariantActions actions, boolean open) {
+    VariantsPanel(GearSetup setup, int editing, ItemIconFactory icons, VariantActions actions, boolean open) {
         this.setup = Objects.requireNonNull(setup, "setup");
         this.editing = editing;
         this.actions = Objects.requireNonNull(actions, "actions");
@@ -57,7 +56,7 @@ final class VariantsPanel extends JPanel {
 
         List<SetupVariant> variants = setup.variants();
         for (int i = 0; i < variants.size(); i++) {
-            VariantCard card = new VariantCard(variants.get(i), i, variants.size(), i == editing, i == setup.selectedIndex(), icons, facts, actions);
+            VariantCard card = new VariantCard(variants.get(i), i, variants.size(), i == editing, i == setup.selectedIndex(), icons, actions);
             cards.add(card);
             body.add(card);
         }
@@ -100,11 +99,6 @@ final class VariantsPanel extends JPanel {
         summary.setText(open ? "· " + count : "· " + count + " · editing " + editedName());
         revalidate();
         repaint();
-    }
-
-    /** Recomputes every card's totals, as when item facts arrive. */
-    void refresh() {
-        cards.forEach(VariantCard::refresh);
     }
 
     private String editedName() {

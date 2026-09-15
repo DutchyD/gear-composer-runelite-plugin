@@ -1,13 +1,11 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
 /** A labelled break above a grid row, spanning some or all of its columns, without taking a slot. */
 @Value
-@Accessors(fluent = true)
 public class Divider {
     int row;
     int fromColumn;

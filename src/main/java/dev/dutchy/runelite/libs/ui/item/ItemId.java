@@ -1,9 +1,7 @@
 package dev.dutchy.runelite.libs.ui.item;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 @Value
-@Accessors(fluent = true)
 public class ItemId implements Comparable<ItemId> {
     int value;
 

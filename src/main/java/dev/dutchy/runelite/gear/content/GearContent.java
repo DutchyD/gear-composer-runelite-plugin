@@ -1,13 +1,11 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.*;
 
 /** Worn equipment and inventory. */
 @Value
-@Accessors(fluent = true)
 public class GearContent implements SetupContent {
     Map<EquipmentSlot, SetupItem> equipment;
     ItemGrid inventory;

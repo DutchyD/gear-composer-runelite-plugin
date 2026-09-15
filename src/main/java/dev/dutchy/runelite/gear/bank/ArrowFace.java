@@ -1,13 +1,11 @@
 package dev.dutchy.runelite.gear.bank;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
 /** A scroll arrow at one end of the variant strip, drawn only when there is somewhere to scroll. */
 @Value
-@Accessors(fluent = true)
 public class ArrowFace {
     boolean forward;
     String glyph;

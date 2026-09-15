@@ -1,7 +1,6 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 import java.util.Objects;
 
 public interface SlotRef {
@@ -36,7 +35,6 @@ public interface SlotRef {
 
     /** A slot inside one cell of a custom layout; the inner reference is an equipment slot or an inventory slot. */
     @Value
-    @Accessors(fluent = true)
     class Cell implements SlotRef {
         CellRef cell;
         SlotRef inner;
@@ -71,7 +69,6 @@ public interface SlotRef {
     }
 
     @Value
-    @Accessors(fluent = true)
     class Equipment implements SlotRef {
         EquipmentSlot slot;
 
@@ -88,7 +85,6 @@ public interface SlotRef {
     }
 
     @Value
-    @Accessors(fluent = true)
     class Grid implements SlotRef {
         GridKind grid;
         int index;

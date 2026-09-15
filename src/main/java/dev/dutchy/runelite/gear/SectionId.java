@@ -1,13 +1,11 @@
 package dev.dutchy.runelite.gear;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 import java.util.UUID;
 
 @Value
-@Accessors(fluent = true)
 public class SectionId {
     UUID value;
 

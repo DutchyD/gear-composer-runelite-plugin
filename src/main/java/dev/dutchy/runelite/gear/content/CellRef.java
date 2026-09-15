@@ -1,11 +1,9 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 /** A position in a custom layout's grid: row from the top, column from the left. */
 @Value
-@Accessors(fluent = true)
 public class CellRef {
     int row;
     int column;

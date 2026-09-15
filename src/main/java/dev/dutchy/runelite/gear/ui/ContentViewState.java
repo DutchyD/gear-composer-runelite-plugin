@@ -5,14 +5,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
 import lombok.With;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 import java.util.Optional;
 
-/** Where the contents page is looking: the row on show, the marked cell, and whether the variants, ledger and finder are open. */
+/** Where the contents page is looking: the row on show, the marked cell, and whether the variants and finder are open. */
 @Value
-@Accessors(fluent = true)
 @With
 class ContentViewState {
 
@@ -20,21 +18,19 @@ class ContentViewState {
     @Getter(AccessLevel.NONE)
     CellRef cell;
     boolean variantsOpen;
-    boolean ledgerOpen;
     boolean finderOpen;
     String finderQuery;
 
-    ContentViewState(int row, CellRef cell, boolean variantsOpen, boolean ledgerOpen, boolean finderOpen, String finderQuery) {
+    ContentViewState(int row, CellRef cell, boolean variantsOpen, boolean finderOpen, String finderQuery) {
         this.row = Math.max(0, row);
         this.cell = cell;
         this.variantsOpen = variantsOpen;
-        this.ledgerOpen = ledgerOpen;
         this.finderOpen = finderOpen;
         this.finderQuery = Objects.requireNonNull(finderQuery, "finderQuery");
     }
 
     static ContentViewState initial() {
-        return new ContentViewState(0, null, true, false, false, "");
+        return new ContentViewState(0, null, true, false, "");
     }
 
     Optional<CellRef> cell() {
@@ -43,10 +39,10 @@ class ContentViewState {
 
     /** Marks the cell and switches to its row. */
     ContentViewState at(CellRef ref) {
-        return new ContentViewState(ref.row(), ref, variantsOpen, ledgerOpen, finderOpen, finderQuery);
+        return new ContentViewState(ref.row(), ref, variantsOpen, finderOpen, finderQuery);
     }
 
     ContentViewState withFinder(boolean open, String query) {
-        return new ContentViewState(row, cell, variantsOpen, ledgerOpen, open, query);
+        return new ContentViewState(row, cell, variantsOpen, open, query);
     }
 }

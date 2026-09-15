@@ -1,7 +1,6 @@
 package dev.dutchy.runelite.gear;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import java.util.Objects;
@@ -9,7 +8,6 @@ import java.util.Optional;
 
 /** A key plus modifiers, stored independently of any client library; {@link #NONE} means no key is bound. */
 @Value
-@Accessors(fluent = true)
 public class Hotkey {
     int keyCode;
     int modifiers;

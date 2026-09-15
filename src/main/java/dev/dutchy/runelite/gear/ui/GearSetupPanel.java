@@ -4,21 +4,16 @@ import dev.dutchy.runelite.gear.*;
 import dev.dutchy.runelite.gear.account.AccountEntry;
 import dev.dutchy.runelite.gear.bank.ActiveSetup;
 import dev.dutchy.runelite.gear.config.GearComposerConfig;
-import dev.dutchy.runelite.gear.config.Onboarding;
 import dev.dutchy.runelite.gear.config.ViewSettings;
 import dev.dutchy.runelite.gear.content.*;
-import dev.dutchy.runelite.gear.guide.*;
+import dev.dutchy.runelite.gear.guide.HelpTopic;
 import dev.dutchy.runelite.gear.history.SetupHistory;
 import dev.dutchy.runelite.gear.history.SetupRevision;
 import dev.dutchy.runelite.gear.layout.GridBlock;
 import dev.dutchy.runelite.gear.layout.Layout;
-import dev.dutchy.runelite.gear.ledger.ItemFactsSource;
-import dev.dutchy.runelite.gear.ledger.Ledger;
-import dev.dutchy.runelite.gear.ledger.SetupDiff;
 import dev.dutchy.runelite.gear.persistence.Backup;
 import dev.dutchy.runelite.gear.player.PlayerItems;
 import dev.dutchy.runelite.gear.requirements.RequirementWatch;
-import dev.dutchy.runelite.gear.share.ShareService;
 import dev.dutchy.runelite.libs.ui.icon.ItemIconFactory;
 import dev.dutchy.runelite.libs.ui.item.ResolvedItem;
 import dev.dutchy.runelite.libs.ui.selector.ItemSelectorFactory;
@@ -48,7 +43,7 @@ import java.util.stream.Stream;
 
 /** Reordering is disabled while a search filter is active. */
 public final class GearSetupPanel extends PluginPanel
-        implements GearSetupBookListener, SetupActions, SectionActions, SetupDropHandler, ContentActions, CellActions, GuideHost {
+        implements GearSetupBookListener, SetupActions, SectionActions, SetupDropHandler, ContentActions, CellActions {
     private static final String LIST_CARD = "list";
     private static final String HOME_CARD = "home";
     static final String ALL_ACCOUNTS = "All accounts";
@@ -63,14 +58,7 @@ public final class GearSetupPanel extends PluginPanel
     static final String IMPORT_FILE = "Import file…";
     static final String EXPORT_ALL = "Export all…";
     static final String BACKUPS = "Backups…";
-    static final String PASTE_SHARE_CODE = "Paste share code…";
-    private static final String SHARE_CARD = "share";
-    private static final String DIFF_CARD = "diff";
-    private static final String SHARE_OUT_CARD = "shareout";
     private static final String CELL_SOURCE_CARD = "cellsource";
-    private static final String GUIDES_CARD = "guides";
-    private static final String BANK_PICTURE_CARD = "bankpicture";
-    static final String GUIDES = "Guides…";
 
     private final GearSetupBook book;
     private final ItemIconFactory icons;
@@ -80,23 +68,17 @@ public final class GearSetupPanel extends PluginPanel
     private final ActiveSetup activeSetup;
     private final PlayerItems playerItems;
     private final GearComposerConfig config;
-    private final Onboarding onboarding;
     private final UndoHistory undo;
     private final DropRule dropRule;
     private final Clock clock;
     private final RequirementWatch requirements;
     private final ViewSettings view;
     private final HoverPreview preview;
-    private final ItemFactsSource facts;
-    private final ShareService shareService;
-    private final GuideProgress guideProgress;
     private final PrayerArtwork prayerArtwork;
     private final EquipmentSlotArtwork slotArtwork;
-    private final GuideRunner guides;
     private final OpenSetupEditor editor;
     private final BulkDelete bulkDelete;
     private final Transfer transfer;
-    private final GuideSamples samples;
     private final Accounts accounts;
     private final SectionCommands sectionCommands;
     private final SetupCommands setupCommands;
@@ -130,21 +112,17 @@ public final class GearSetupPanel extends PluginPanel
                           ActiveSetup activeSetup,
                           PlayerItems playerItems,
                           GearComposerConfig config,
-                          Onboarding onboarding,
                           UndoHistory undo,
                           RequirementWatch requirements,
-                          GuideProgress guideProgress,
-                          ShareService shareService,
                           SetupHistory history,
                           BulkDelete bulkDelete,
                           Transfer transfer,
-                          GuideSamples samples,
                           Accounts accounts,
                           SectionCommands sectionCommands,
                           SetupCommands setupCommands,
                           PageParts parts) {
-        this(book, filter, activeSetup, playerItems, config, onboarding, undo, requirements, guideProgress, shareService,
-                history, bulkDelete, transfer, samples, accounts, sectionCommands, setupCommands, parts, SwingPrompts::over);
+        this(book, filter, activeSetup, playerItems, config, undo, requirements,
+                history, bulkDelete, transfer, accounts, sectionCommands, setupCommands, parts, SwingPrompts::over);
     }
 
     /** {@code prompts} is how the modules ask and report; a test hands over one that never opens a dialog. */
@@ -153,15 +131,11 @@ public final class GearSetupPanel extends PluginPanel
                    ActiveSetup activeSetup,
                    PlayerItems playerItems,
                    GearComposerConfig config,
-                   Onboarding onboarding,
                    UndoHistory undo,
                    RequirementWatch requirements,
-                   GuideProgress guideProgress,
-                   ShareService shareService,
                    SetupHistory history,
                    BulkDelete bulkDelete,
                    Transfer transfer,
-                   GuideSamples samples,
                    Accounts accounts,
                    SectionCommands sectionCommands,
                    SetupCommands setupCommands,
@@ -172,14 +146,10 @@ public final class GearSetupPanel extends PluginPanel
         this.activeSetup = Objects.requireNonNull(activeSetup, "activeSetup");
         this.playerItems = Objects.requireNonNull(playerItems, "playerItems");
         this.config = Objects.requireNonNull(config, "config");
-        this.onboarding = Objects.requireNonNull(onboarding, "onboarding");
         this.undo = Objects.requireNonNull(undo, "undo");
         this.requirements = Objects.requireNonNull(requirements, "requirements");
-        this.guideProgress = Objects.requireNonNull(guideProgress, "guideProgress");
-        this.shareService = Objects.requireNonNull(shareService, "shareService");
         this.bulkDelete = Objects.requireNonNull(bulkDelete, "bulkDelete");
         this.transfer = Objects.requireNonNull(transfer, "transfer");
-        this.samples = Objects.requireNonNull(samples, "samples");
         this.accounts = Objects.requireNonNull(accounts, "accounts");
         this.sectionCommands = Objects.requireNonNull(sectionCommands, "sectionCommands");
         this.setupCommands = Objects.requireNonNull(setupCommands, "setupCommands");
@@ -190,11 +160,9 @@ public final class GearSetupPanel extends PluginPanel
         this.artwork = parts.typeArtwork();
         this.prayerArtwork = parts.prayerArtwork();
         this.slotArtwork = parts.slotArtwork();
-        this.facts = parts.facts();
         this.view = parts.view();
         this.dropRule = parts.dropRule();
         this.clock = parts.clock();
-        this.guides = new GuideRunner(this, this, guideProgress, this::refreshGuideState);
         this.preview = new HoverPreview(parts.icons());
 
         setLayout(new BorderLayout());
@@ -204,7 +172,7 @@ public final class GearSetupPanel extends PluginPanel
         drags = new SetupDragController(sections, this::nearestGrid, this::sectionViewAt, this::springOpen, this);
         sectionDrags = new SectionDragController(sections, this::onSectionDropped);
 
-        pages = new PageStack(LIST_CARD, listCard(), this::guideButton, name -> refreshListChrome());
+        pages = new PageStack(LIST_CARD, listCard(), name -> refreshListChrome());
         editor = new OpenSetupEditor(book, Objects.requireNonNull(history, "history"), new OpenSetupEditor.Listener() {
             @Override
             public void changed(String cause, UnaryOperator<ContentViewState> focus) {
@@ -244,16 +212,10 @@ public final class GearSetupPanel extends PluginPanel
             }
 
             @Override
-            public void showShared(GearSetup shared) {
-                showSharedPage(shared);
-            }
-
-            @Override
             public void backToList() {
                 showListCard();
             }
-        }, this::ownerForNewSetups);
-        samples.shownBy(asked, this::refreshActiveHighlights);
+        });
         sectionCommands.shownBy(asked, new SectionCommands.Listener() {
             @Override
             public void renameStarted(SectionId sectionId) {
@@ -307,7 +269,6 @@ public final class GearSetupPanel extends PluginPanel
         book.addChangeListener(this);
         activeSetup.addListener(() -> SwingUtilities.invokeLater(this::followActiveSetup));
         requirements.addListener(() -> SwingUtilities.invokeLater(this::refreshBanner));
-        facts.addListener(() -> contentPanel().ifPresent(SetupContentPanel::refreshLedger));
         refreshViewedLine();
         refreshBanner();
         rebuild();
@@ -359,9 +320,7 @@ public final class GearSetupPanel extends PluginPanel
     /** The accounts screen: the home while logged out, and the way to any account's setups. */
     void showHome() {
         Runnable backToMine = accounts.mine().map(owner -> (Runnable) () -> viewOwner(owner)).orElse(null);
-        JComponent frontDoor = book.isEmpty() && !onboarding.isDismissed() && !samples.anyTutorialCompleted()
-                ? new OnboardingCard(this::startStandaloneGuide, this::dismissOnboarding) : null;
-        pages.replace(HOME_CARD, new AccountsPage(accounts.roster(), entry -> viewOwner(entry.owner()), this::forgetAccount, backToMine, frontDoor), GuideId.HOME);
+        pages.replace(HOME_CARD, new AccountsPage(accounts.roster(), entry -> viewOwner(entry.owner()), this::forgetAccount, backToMine, null));
         pages.show(HOME_CARD);
     }
 
@@ -381,15 +340,6 @@ public final class GearSetupPanel extends PluginPanel
 
     boolean isUndoOffered() {
         return undoButton.isVisible();
-    }
-
-    boolean isOnboardingShowing() {
-        return Stream.of(sections.getComponents()).anyMatch(OnboardingCard.class::isInstance);
-    }
-
-    void dismissOnboarding() {
-        onboarding.dismiss();
-        rebuild();
     }
 
     void undo() {
@@ -573,7 +523,6 @@ public final class GearSetupPanel extends PluginPanel
         });
 
         searchLine.add(searchField, BorderLayout.CENTER);
-        searchLine.add(guideButton(GuideId.LIST), BorderLayout.EAST);
         JPanel searchRow = Ui.panel(new BorderLayout(0, Ui.SMALL_GAP));
         searchRow.add(searchLine, BorderLayout.NORTH);
         searchRow.add(Ui.column(Ui.SMALL_GAP, bulkBar(), bannerLine()), BorderLayout.SOUTH);
@@ -607,9 +556,7 @@ public final class GearSetupPanel extends PluginPanel
         return new ContextMenu()
                 .item(ActionIcon.MOVE_DOWN, IMPORT_FILE, transfer::importFile)
                 .item(ActionIcon.MOVE_UP, EXPORT_ALL, transfer::exportAll)
-                .item(ActionIcon.CLOCK, BACKUPS, transfer::showBackups)
-                .item(ActionIcon.COPY, PASTE_SHARE_CODE, transfer::pasteShareCode)
-                .item(ActionIcon.HELP, GUIDES, this::showGuides);
+                .item(ActionIcon.CLOCK, BACKUPS, transfer::showBackups);
     }
 
     TileStyle tileStyle() {
@@ -628,17 +575,6 @@ public final class GearSetupPanel extends PluginPanel
 
     private void refreshStyleButton() {
         styleButton.setToolTipText("Setup list: " + view.tileStyle().displayName() + ". Click for " + view.tileStyle().next().displayName().toLowerCase());
-    }
-
-    @Override
-    public void copyShareCode(GearSetup setup) {
-        transfer.copyShareCode(setup);
-    }
-
-    private void showSharedPage(GearSetup shared) {
-        pages.replace(SHARE_CARD, new SharePreviewPage(shared, book.sections(),
-                sectionId -> transfer.addShared(shared, sectionId), this::showListCard), GuideId.SHARE_CODE);
-        pages.show(SHARE_CARD);
     }
 
     @Override
@@ -688,100 +624,6 @@ public final class GearSetupPanel extends PluginPanel
     }
 
     @Override
-    public void compareVariant(int index) {
-        editor.setup().ifPresent(setup -> setup.variantAt(index).ifPresent(variant -> {
-            compare(setup);
-            diffPage().ifPresent(page -> page.choose(DiffPage.Target.variant(variant)));
-        }));
-    }
-
-    @Override
-    public void compare() {
-        editor.setup().ifPresent(this::compare);
-    }
-
-    @Override
-    public void share() {
-        editor.setup().ifPresent(this::share);
-    }
-
-    /** The subject is the variant on the page, so a card's compare sets its variant against the edited one. */
-    @Override
-    public void compare(GearSetup opened) {
-        editor.open(opened.id());
-        GearSetup setup = opened.withSelectedVariant(editor.editingIndex());
-        List<GearSetup> others = book.sections().stream()
-                .flatMap(section -> section.setups().stream())
-                .filter(other -> !other.id().equals(setup.id()) && SetupDiff.comparable(setup.content(), other.content()))
-                .collect(Collectors.toList());
-        boolean liveOffered = setup.content() instanceof GearContent;
-        DiffPage page = new DiffPage(setup, others, liveOffered, icons, target -> compareWith(setup, target), this::showContentCard);
-        pages.replace(DIFF_CARD, page, GuideId.COMPARE);
-        pages.show(DIFF_CARD);
-        if (!others.isEmpty()) {
-            page.choose(DiffPage.Target.setup(others.get(0)));
-        } else if (liveOffered) {
-            page.choose(DiffPage.Target.live());
-        }
-    }
-
-    private void compareWith(GearSetup subject, DiffPage.Target target) {
-        if (target.content().isPresent()) {
-            showDiff(subject, target.name(), target.content().get());
-            return;
-        }
-        playerItems.capture(loadout -> showDiff(subject, DiffPage.WORN_NOW, new GearContent(loadout.equipment(), loadout.inventory())),
-                () -> say("Log in to compare with what you wear."));
-    }
-
-    private void showDiff(GearSetup subject, String otherName, SetupContent other) {
-        Optional<DiffPage> page = diffPage();
-        if (page.isEmpty()) {
-            return;
-        }
-        facts.warmUp(Ledger.itemsOf(other));
-        page.get().show(subject.name(), otherName, SetupDiff.between(subject.content(), other),
-                Ledger.of(subject.content(), facts), Ledger.of(other, facts));
-    }
-
-    Optional<DiffPage> diffPage() {
-        return pages.visible(DiffPage.class);
-    }
-
-    @Override
-    public void share(GearSetup setup) {
-        editor.open(setup.id());
-        facts.warmUp(Ledger.itemsOf(setup.content()));
-        SharePage page = new SharePage(setup, icons, config.shareLedger(),
-                action -> runShare(setup, action), this::showContentCard);
-        pages.replace(SHARE_OUT_CARD, page, GuideId.SHARE);
-        pages.show(SHARE_OUT_CARD);
-    }
-
-    private void runShare(GearSetup setup, SharePage.Action action) {
-        boolean withLedger = sharePage().map(SharePage::withLedger).orElse(config.shareLedger());
-        say("Preparing " + setup.name() + "…");
-        CompletableFuture<String> outcome;
-        switch (action) {
-            case SAVE_IMAGE:
-                outcome = shareService.saveImage(setup, withLedger);
-                break;
-            case COPY_IMAGE:
-                outcome = shareService.copyImage(setup, withLedger);
-                break;
-            default:
-                outcome = shareService.copyText(setup, withLedger);
-                break;
-        }
-        outcome.whenComplete((message, error) -> SwingUtilities.invokeLater(() ->
-                say(error == null ? message : "Sharing failed: " + error.getMessage())));
-    }
-
-    Optional<SharePage> sharePage() {
-        return pages.visible(SharePage.class);
-    }
-
-    @Override
     public void setCellKind(CellRef ref, CellKind kind) {
         editor.setCellKind(ref, kind);
     }
@@ -796,7 +638,7 @@ public final class GearSetupPanel extends PluginPanel
         pages.replace(CELL_SOURCE_CARD, new CellSourcePage(ref, sources, source -> {
             editor.fillCell(ref, source.cell(), source.setupName());
             returnToContents();
-        }, this::showContentCard), GuideId.CELL_SOURCE);
+        }, this::showContentCard));
         pages.show(CELL_SOURCE_CARD);
     }
 
@@ -824,121 +666,6 @@ public final class GearSetupPanel extends PluginPanel
         content.emptyCell(ref);
     }
 
-    // --- guides ---
-
-    GuideRunner guides() {
-        return guides;
-    }
-
-    /** From a page's ? button: explains what is on screen right now. */
-    void startGuide(GuideId id) {
-        guides.start(Guides.of(id));
-    }
-
-    /** From the Guides list or the front door: opens the page on a sample so there is always something to point at. */
-    void startStandaloneGuide(GuideId id) {
-        guides.start(Guides.standalone(id));
-    }
-
-    public void endGuide() {
-        guides.end();
-    }
-
-    void showGuides() {
-        pages.replace(GUIDES_CARD, new GuidesPage(guideProgress, guide -> startStandaloneGuide(guide.id()), this::showListCard));
-        pages.show(GUIDES_CARD);
-    }
-
-    Optional<GuidesPage> guidesPage() {
-        return pages.visible(GuidesPage.class);
-    }
-
-    /** A page's ? button, dotted until that page's guide has been completed once. */
-    GuideButton guideButton(GuideId id) {
-        return new GuideButton(() -> startGuide(id), !guideProgress.isCompleted(id));
-    }
-
-    private void refreshGuideState() {
-        if (!guides.isRunning() && isListShowing()) {
-            rebuild();
-        }
-    }
-
-    private void showBankPicture(GearSetup setup) {
-        pages.replace(BANK_PICTURE_CARD, new BankPicturePage(setup, sample -> shareService.render(sample, false), this::showListCard));
-        pages.show(BANK_PICTURE_CARD);
-    }
-
-    Optional<BankPicturePage> bankPicturePage() {
-        return pages.visible(BankPicturePage.class);
-    }
-
-    @Override
-    public void showGuidePage(GuidePage page, SetupId sample) {
-        Optional<GearSetup> setup = Optional.ofNullable(sample).flatMap(book::setup);
-        switch (page) {
-            case HOME:
-                showHome();
-                break;
-            case LIST:
-                showListCard();
-                break;
-            case EDITOR:
-                setup.ifPresent(this::edit);
-                break;
-            case CONTENTS:
-                setup.ifPresent(this::editContents);
-                break;
-            case SLOT:
-                setup.ifPresent(found -> {
-                    editor.open(found.id());
-                    editSlot(firstSlotOf(editor.content().orElse(found.content())));
-                });
-                break;
-            case DIVIDER:
-                setup.ifPresent(found -> {
-                    editor.open(found.id());
-                    firstGridSlotOf(editor.content().orElse(found.content())).ifPresentOrElse(this::editDivider, () -> editContents(found));
-                });
-                break;
-            case BANK_PICTURE:
-                setup.ifPresent(this::showBankPicture);
-                break;
-            case COMPARE:
-                setup.ifPresent(this::compare);
-                break;
-            case SHARE:
-                setup.ifPresent(this::share);
-                break;
-            case HISTORY:
-                setup.ifPresent(found -> {
-                    editor.open(found.id());
-                    showHistory();
-                });
-                break;
-            case HOTKEY:
-                setup.ifPresent(this::chooseHotkey);
-                break;
-            case IMPORT:
-                setup.ifPresent(found -> transfer.offerImport("a sample file", List.of(new GearSection(SectionId.random(), "Sample section", List.of(found)))));
-                break;
-            case BACKUPS:
-                transfer.showBackups();
-                break;
-            case SHARE_CODE:
-                setup.ifPresent(this::showSharedPage);
-                break;
-            case CELL_SOURCE:
-                setup.ifPresent(found -> {
-                    editor.open(found.id());
-                    fillCellFromSetup(CellRef.of(0, 1));
-                });
-                break;
-            default:
-                break;
-        }
-    }
-
     private static SlotRef firstSlotOf(SetupContent content) {
         if (content instanceof BankContent) {
             return SlotRef.of(GridKind.LEFT, 0);
@@ -949,59 +676,12 @@ public final class GearSetupPanel extends PluginPanel
         return SlotRef.of(EquipmentSlot.WEAPON);
     }
 
-    /** The first slot of the first item grid, where a divider guide can start. */
+    /** The first slot of the first item grid. */
     private static Optional<SlotRef> firstGridSlotOf(SetupContent content) {
         return Layout.of(content).blocks().stream()
                 .filter(block -> block instanceof GridBlock)
                 .map(block -> ((GridBlock) block).ref(0))
                 .findFirst();
-    }
-
-    @Override
-    public Optional<JComponent> guideAnchor(HelpTopic topic) {
-        if (topic == HelpTopic.CELL || topic == HelpTopic.EMPTY_CELL) {
-            contentPanel().ifPresent(page -> page.showRowWithCell(topic == HelpTopic.EMPTY_CELL));
-        }
-        return Help.find(this, topic);
-    }
-
-    @Override
-    public SetupId createSample(SetupType type) {
-        return samples.create(type);
-    }
-
-    @Override
-    public void removeSample(SetupId sample) {
-        samples.remove(sample);
-    }
-
-    @Override
-    public void keepSample(SetupId sample) {
-        samples.keep(sample);
-    }
-
-    @Override
-    public boolean isBankOpen() {
-        return samples.isBankOpen();
-    }
-
-    @Override
-    public void showInBank(SetupId sample) {
-        samples.showInBank(sample);
-    }
-
-    @Override
-    public void hideFromBank(SetupId sample) {
-        samples.hideFromBank(sample);
-    }
-
-    @Override
-    public boolean askToKeepSample() {
-        return samples.askToKeep();
-    }
-
-    Optional<SharePreviewPage> sharePreviewPage() {
-        return pages.visible(SharePreviewPage.class);
     }
 
     @Override
@@ -1018,7 +698,7 @@ public final class GearSetupPanel extends PluginPanel
         pages.replace(IMPORT_CARD, new ImportPage(source, imported,
                 () -> transfer.addImported(imported),
                 () -> transfer.replaceWithImported(source, imported),
-                this::showListCard), GuideId.IMPORT);
+                this::showListCard));
         pages.show(IMPORT_CARD);
     }
 
@@ -1027,7 +707,7 @@ public final class GearSetupPanel extends PluginPanel
     }
 
     private void showBackupsPage(List<Backup> backups) {
-        pages.replace(BACKUPS_CARD, new BackupsPage(backups, clock.getZone(), transfer::restoreBackup, this::showListCard), GuideId.BACKUPS);
+        pages.replace(BACKUPS_CARD, new BackupsPage(backups, clock.getZone(), transfer::restoreBackup, this::showListCard));
         pages.show(BACKUPS_CARD);
     }
 
@@ -1131,9 +811,7 @@ public final class GearSetupPanel extends PluginPanel
         if (visible.isEmpty()) {
             sections.add(message("No setups match \"" + query.strip() + "\""));
         } else {
-            if (book.isEmpty() && !onboarding.isDismissed() && !samples.anyTutorialCompleted()) {
-                sections.add(new OnboardingCard(this::startStandaloneGuide, this::dismissOnboarding));
-            } else if (book.isEmpty()) {
+            if (book.isEmpty()) {
                 sections.add(message("No setups yet. Use + to create one."));
             } else if (inScope.stream().allMatch(GearSection::isEmpty)) {
                 sections.add(message("Nothing for " + describeViewed() + " yet."));
@@ -1264,7 +942,7 @@ public final class GearSetupPanel extends PluginPanel
     @Override
     public void chooseHotkey(GearSetup setup) {
         HotkeyCapturePage page = new HotkeyCapturePage(setup, hotkey -> setHotkey(setup, hotkey), this::showListCard);
-        pages.replace(HOTKEY_CARD, page, GuideId.HOTKEY);
+        pages.replace(HOTKEY_CARD, page);
         pages.show(HOTKEY_CARD);
         page.requestFocusInWindow();
     }
@@ -1357,11 +1035,10 @@ public final class GearSetupPanel extends PluginPanel
             return;
         }
         dropRule.warmUp(SetupContentEditor.allItems(setup.get().content()).stream().map(SetupItem::id).collect(Collectors.toList()));
-        setup.get().variants().forEach(variant -> facts.warmUp(Ledger.itemsOf(variant.content())));
         ContentViewState view = pendingView.apply(pages.any(SetupContentPanel.class).map(SetupContentPanel::viewState).orElse(ContentViewState.initial()));
         pendingView = UnaryOperator.identity();
-        SetupContentPanel page = new SetupContentPanel(setup.get(), editor.editingIndex(), icons, slotArtwork, selectors, dropRule, this, this, facts, view);
-        pages.replace(CONTENT_CARD, page, Guides.contentsGuideFor(setup.get().type()));
+        SetupContentPanel page = new SetupContentPanel(setup.get(), editor.editingIndex(), icons, slotArtwork, selectors, dropRule, this, this, view);
+        pages.replace(CONTENT_CARD, page);
         pages.show(CONTENT_CARD);
     }
 
@@ -1408,7 +1085,7 @@ public final class GearSetupPanel extends PluginPanel
         SlotEditorForm form = SetupContentEditor.itemAt(content.get(), ref)
                 .map(existing -> SlotEditorForm.forItem(ref, existing, icons, selectors, slotListener))
                 .orElseGet(() -> SlotEditorForm.forEmptySlot(ref, icons, selectors, slotListener));
-        pages.replace(SLOT_CARD, form, GuideId.SLOT);
+        pages.replace(SLOT_CARD, form);
         pages.show(SLOT_CARD);
     }
 
@@ -1466,7 +1143,7 @@ public final class GearSetupPanel extends PluginPanel
                 showContentCard();
             }
         });
-        pages.replace(DIVIDER_CARD, form, GuideId.DIVIDER);
+        pages.replace(DIVIDER_CARD, form);
         pages.show(DIVIDER_CARD);
     }
 
@@ -1521,7 +1198,7 @@ public final class GearSetupPanel extends PluginPanel
             return;
         }
         HistoryPage historyPage = new HistoryPage(setup.get(), content.revisions(setup.get().id()), clock, this::restoreRevision, this::showContentCard);
-        pages.replace(HISTORY_CARD, historyPage, GuideId.HISTORY);
+        pages.replace(HISTORY_CARD, historyPage);
         pages.show(HISTORY_CARD);
     }
 
@@ -1534,7 +1211,7 @@ public final class GearSetupPanel extends PluginPanel
     }
 
     private void showEditor(SetupEditorForm form) {
-        pages.replace(EDITOR_CARD, form, GuideId.EDITOR);
+        pages.replace(EDITOR_CARD, form);
         pages.showOver(EDITOR_CARD);
         form.requestFocusInWindow();
     }

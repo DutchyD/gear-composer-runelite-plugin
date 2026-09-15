@@ -6,7 +6,6 @@ import dev.dutchy.runelite.gear.SetupOrder;
 import dev.dutchy.runelite.gear.guide.HelpTopic;
 import dev.dutchy.runelite.libs.ui.icon.ItemIconFactory;
 import lombok.Value;
-import lombok.experimental.Accessors;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
 
@@ -19,7 +18,6 @@ import java.util.Objects;
 final class SectionView extends JPanel {
 
     @Value
-    @Accessors(fluent = true)
     static class Config {
         boolean deletable;
         boolean collapsed;

@@ -3,7 +3,6 @@ package dev.dutchy.runelite.gear.ui;
 import dev.dutchy.runelite.gear.content.QuantityText;
 import dev.dutchy.runelite.gear.content.SetupItem;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,7 +18,6 @@ final class AmountPresets extends JPanel {
     static final String BANK = "BANK";
 
     @Value
-    @Accessors(fluent = true)
     private static class Preset {
         String text;
         int value;

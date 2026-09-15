@@ -3,7 +3,6 @@ package dev.dutchy.runelite.gear;
 import dev.dutchy.runelite.gear.content.*;
 import dev.dutchy.runelite.libs.ui.item.ItemId;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +15,6 @@ import java.util.function.UnaryOperator;
  * survives reordering. {@code iconId} may be null, meaning a lettered tile; read it through {@link #icon()}.
  */
 @Value
-@Accessors(fluent = true)
 public class GearSetup {
     SetupId id;
     String name;

@@ -2,12 +2,10 @@ package dev.dutchy.runelite.libs.ui.search;
 
 import dev.dutchy.runelite.libs.ui.item.ResolvedItem;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
 @Value
-@Accessors(fluent = true)
 public class IndexedItem {
     ResolvedItem item;
     String normalizedName;

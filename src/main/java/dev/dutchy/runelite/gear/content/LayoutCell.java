@@ -3,13 +3,11 @@ package dev.dutchy.runelite.gear.content;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.*;
 
 /** One cell of a custom layout: an equipment set, an inventory, or nothing, with an optional name. */
 @Value
-@Accessors(fluent = true)
 public class LayoutCell {
     CellKind kind;
     @Getter(AccessLevel.NONE)

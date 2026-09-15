@@ -1,7 +1,6 @@
 package dev.dutchy.runelite.gear.bank;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
@@ -12,7 +11,6 @@ import java.util.Objects;
  * name the child already has, which is how an item the player holds keeps its own menu text.
  */
 @Value
-@Accessors(fluent = true)
 public class SlotFace {
 
     public enum Kind {

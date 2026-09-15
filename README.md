@@ -107,8 +107,8 @@ The plugin targets Java 11, which is what the Plugin Hub builds with. Any JDK 11
 
 ## Repository layout
 
-`src/main` is the plugin, and it's the only thing the Plugin Hub builds. `src/test` holds the tests,
-which run headless and don't need a game client.
+`src/main` is the plugin, and it's the only thing the Plugin Hub builds. `src/test` holds the
+development client launcher used by `./gradlew run`.
 
 ## Licence
 

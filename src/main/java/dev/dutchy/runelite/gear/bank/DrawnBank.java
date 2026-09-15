@@ -2,7 +2,6 @@ package dev.dutchy.runelite.gear.bank;
 
 import dev.dutchy.runelite.gear.layout.LayoutLabel;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.List;
 import java.util.Map;
@@ -11,7 +10,6 @@ import java.util.Optional;
 
 /** What the bank shows right now: each drawn slot by bank child index, the labels, where the rows sit, and the search in force. Safe to read from any thread. */
 @Value
-@Accessors(fluent = true)
 public class DrawnBank {
 
     public static final DrawnBank NONE = new DrawnBank(false, Map.of(), List.of(), BankRows.plain(), "");

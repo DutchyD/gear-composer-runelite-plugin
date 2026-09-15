@@ -21,7 +21,4 @@ interface VariantActions {
 
     /** Moves the variant one place up or down the list. */
     void moveVariant(int index, int to);
-
-    /** Opens the compare page with the variant set against the edited one. */
-    void compareVariant(int index);
 }

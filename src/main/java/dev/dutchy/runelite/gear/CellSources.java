@@ -8,7 +8,6 @@ import dev.dutchy.runelite.gear.layout.GridBlock;
 import dev.dutchy.runelite.gear.layout.Layout;
 import dev.dutchy.runelite.gear.layout.LayoutBlock;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ public final class CellSources {
 
     /** One copyable part of a setup, already shaped as the cell it would become. */
     @Value
-    @Accessors(fluent = true)
     public static class Source {
         String setupName;
         String partName;

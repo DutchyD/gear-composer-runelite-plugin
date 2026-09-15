@@ -1,7 +1,6 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
@@ -10,7 +9,6 @@ import java.util.Objects;
  * a variant, so a pointer survives the variant being renamed or moved.
  */
 @Value
-@Accessors(fluent = true)
 public class SetupVariant {
     VariantId id;
     String name;

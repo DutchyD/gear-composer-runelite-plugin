@@ -5,6 +5,7 @@ import dev.dutchy.runelite.gear.GearSetupBook;
 import dev.dutchy.runelite.gear.SetupId;
 import dev.dutchy.runelite.gear.history.SetupHistory;
 import lombok.Getter;
+import lombok.experimental.Accessors;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -16,6 +17,7 @@ import java.util.function.Supplier;
  * Picking several setups and sections and deleting them in one go. Owns whether the list is in bulk
  * mode and what is picked; a section takes its setups and their history with it.
  */
+@Accessors(fluent = false)
 public final class BulkDelete implements BulkSelector {
 
     static final String PICK_HINT = "Pick what to delete. Shift click for a range.";

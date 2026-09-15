@@ -2,10 +2,8 @@ package dev.dutchy.runelite.libs.ui.image;
 
 import dev.dutchy.runelite.libs.ui.item.ItemId;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 @Value
-@Accessors(fluent = true)
 public class ItemImageOptions {
     int quantity;
     boolean showQuantity;

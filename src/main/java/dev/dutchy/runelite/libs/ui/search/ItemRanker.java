@@ -2,7 +2,6 @@ package dev.dutchy.runelite.libs.ui.search;
 
 import dev.dutchy.runelite.libs.ui.item.ResolvedItem;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -27,7 +26,6 @@ public final class ItemRanker {
             throw new IllegalArgumentException("Limit must be positive, got " + limit);
         }
         @Value
-        @Accessors(fluent = true)
         class Scored {
             ResolvedItem item;
             int score;

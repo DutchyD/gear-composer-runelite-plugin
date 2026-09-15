@@ -1,7 +1,6 @@
 package dev.dutchy.runelite.libs.ui.item;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 import java.util.Objects;
 
 public interface ItemReference {
@@ -21,7 +20,6 @@ public interface ItemReference {
     String describe();
 
     @Value
-    @Accessors(fluent = true)
     class ById implements ItemReference {
         ItemId id;
 
@@ -38,7 +36,6 @@ public interface ItemReference {
     }
 
     @Value
-    @Accessors(fluent = true)
     class ByName implements ItemReference {
         String name;
 

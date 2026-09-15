@@ -24,9 +24,6 @@ import java.util.Objects;
 final class SetupTile extends Card {
 
     static final String DUPLICATE = "Duplicate";
-    static final String COPY_SHARE_CODE = "Copy share code";
-    static final String COMPARE = "Compare…";
-    static final String SHARE = "Share…";
     static final String PIN = "Pin";
     static final String UNPIN = "Unpin";
     static final String SET_HOTKEY = "Set hotkey…";
@@ -348,9 +345,6 @@ final class SetupTile extends Card {
                 .item(ActionIcon.RENAME, "Rename", () -> actions.edit(setup))
                 .item(ActionIcon.PIN, setup.isPinned() ? UNPIN : PIN, () -> actions.togglePin(setup))
                 .item(ActionIcon.KEY, setup.meta().hasHotkey() ? "Hotkey: " + setup.meta().hotkey().describe() : SET_HOTKEY, () -> actions.chooseHotkey(setup))
-                .item(ActionIcon.COPY, COPY_SHARE_CODE, () -> actions.copyShareCode(setup))
-                .item(ActionIcon.GRID, COMPARE, () -> actions.compare(setup))
-                .item(ActionIcon.COPY, SHARE, () -> actions.share(setup))
                 .swatches(setup.meta().label(), label -> actions.setLabel(setup, label));
         for (Owner owner : actions.otherOwners(setup)) {
             menu.item(ActionIcon.SYNC, owner.isShared() ? SHARE_WITH_ALL : moveTo(actions.describeOwner(owner)), () -> actions.moveTo(setup, owner));

@@ -2,7 +2,6 @@ package dev.dutchy.runelite.gear.bank;
 
 import dev.dutchy.runelite.gear.layout.LayoutLabel;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
  * expressed. A screen writes the frame and hides every child it owns that the frame does not mention.
  */
 @Value
-@Accessors(fluent = true)
 public class BankFrame {
 
     public static final BankFrame NONE = new BankFrame(Map.of(), List.of(), List.of(), 0, 0, false);

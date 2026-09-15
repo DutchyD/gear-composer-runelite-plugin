@@ -1,10 +1,8 @@
 package dev.dutchy.runelite.gear.ui;
 
 import dev.dutchy.runelite.gear.GearSetup;
+import dev.dutchy.runelite.gear.content.SetupContentEditor;
 import dev.dutchy.runelite.gear.content.SetupVariant;
-import dev.dutchy.runelite.gear.ledger.ItemFactsSource;
-import dev.dutchy.runelite.gear.ledger.Ledger;
-import dev.dutchy.runelite.gear.ledger.LedgerFormat;
 import dev.dutchy.runelite.libs.ui.icon.ItemIconFactory;
 import net.runelite.client.ui.ColorScheme;
 import net.runelite.client.ui.FontManager;
@@ -21,7 +19,6 @@ final class VariantCard extends Card {
     static final String SHOW = "Show";
     static final String RENAME = "Rename…";
     static final String DUPLICATE = "Duplicate";
-    static final String COMPARE = "Compare with edited";
     static final String MOVE_UP = "Move up";
     static final String MOVE_DOWN = "Move down";
     static final String DELETE = "Delete";
@@ -34,12 +31,11 @@ final class VariantCard extends Card {
     private final boolean chosen;
     private final boolean shown;
     private final VariantActions actions;
-    private final ItemFactsSource facts;
     private final JLabel totals = Ui.hint("");
     private final FlatButton more;
     private boolean hovered;
 
-    VariantCard(SetupVariant variant, int index, int count, boolean chosen, boolean shown, ItemIconFactory icons, ItemFactsSource facts,
+    VariantCard(SetupVariant variant, int index, int count, boolean chosen, boolean shown, ItemIconFactory icons,
                 VariantActions actions) {
         this.variant = Objects.requireNonNull(variant, "variant");
         this.index = index;
@@ -47,7 +43,6 @@ final class VariantCard extends Card {
         this.chosen = chosen;
         this.shown = shown;
         this.actions = Objects.requireNonNull(actions, "actions");
-        this.facts = Objects.requireNonNull(facts, "facts");
         Objects.requireNonNull(icons, "icons");
         setLayout(new BorderLayout(Ui.SMALL_GAP, 0));
         setBorder(BorderFactory.createEmptyBorder(6, 8, 6, 4));
@@ -64,7 +59,7 @@ final class VariantCard extends Card {
             text.add(badge);
         }
 
-        more = new FlatButton(ActionIcon.MORE, "Rename, duplicate, compare, move or delete this variant", this::showMenu);
+        more = new FlatButton(ActionIcon.MORE, "Rename, duplicate, move or delete this variant", this::showMenu);
         more.setPreferredSize(new Dimension(20, 20));
 
         add(new MiniLayoutView(variant.content(), icons, CELL), BorderLayout.WEST);
@@ -92,11 +87,9 @@ final class VariantCard extends Card {
         return totals.getText();
     }
 
-    /** Recomputes the item count and value, as when item facts arrive. */
     void refresh() {
-        Ledger ledger = Ledger.of(variant.content(), facts);
-        String items = ledger.itemCount() == 1 ? "1 item" : ledger.itemCount() + " items";
-        totals.setText(ledger.itemCount() == 0 ? items : items + " · " + LedgerFormat.coins(ledger.value()) + (ledger.openEnded() ? "+" : ""));
+        int items = SetupContentEditor.allItems(variant.content()).size();
+        totals.setText(items == 1 ? "1 item" : items + " items");
         refreshBackground();
     }
 
@@ -108,9 +101,6 @@ final class VariantCard extends Card {
         menu.item(ActionIcon.RENAME, RENAME, () -> actions.renameVariant(index));
         if (count < GearSetup.MAX_VARIANTS) {
             menu.item(ActionIcon.COPY, DUPLICATE, () -> actions.duplicateVariant(index));
-        }
-        if (!chosen) {
-            menu.item(ActionIcon.GRID, COMPARE, () -> actions.compareVariant(index));
         }
         if (index > 0) {
             menu.item(ActionIcon.MOVE_UP, MOVE_UP, () -> actions.moveVariant(index, index - 1));

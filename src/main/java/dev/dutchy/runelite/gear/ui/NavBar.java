@@ -36,29 +36,4 @@ final class NavBar {
         bar.add(heading, BorderLayout.CENTER);
         return bar;
     }
-
-    /** Puts the guide button on the right of the page's nav bar, if the page has one. */
-    static void attachGuide(Container page, JComponent guide) {
-        for (Component child : page.getComponents()) {
-            if (child instanceof JPanel && Boolean.TRUE.equals(((JPanel) child).getClientProperty(NAV_BAR))) {
-                JPanel bar = (JPanel) child;
-                Component existing = ((BorderLayout) bar.getLayout()).getLayoutComponent(BorderLayout.EAST);
-                if (existing == null) {
-                    bar.add(guide, BorderLayout.EAST);
-                } else {
-                    bar.remove(existing);
-                    JPanel east = Ui.panel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
-                    east.add(existing);
-                    east.add(guide);
-                    bar.add(east, BorderLayout.EAST);
-                }
-                bar.revalidate();
-                return;
-            }
-            if (child instanceof Container) {
-                attachGuide((Container) child, guide);
-            }
-        }
-    }
-
 }

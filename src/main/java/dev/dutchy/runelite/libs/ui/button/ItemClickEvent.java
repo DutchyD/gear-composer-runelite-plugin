@@ -2,13 +2,11 @@ package dev.dutchy.runelite.libs.ui.button;
 
 import dev.dutchy.runelite.libs.ui.item.ResolvedItem;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.awt.event.MouseEvent;
 import java.util.Objects;
 
 @Value
-@Accessors(fluent = true)
 public class ItemClickEvent {
     ItemButton source;
     ResolvedItem item;

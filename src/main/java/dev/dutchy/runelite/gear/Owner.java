@@ -1,14 +1,12 @@
 package dev.dutchy.runelite.gear;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 import java.util.Optional;
 
 /** Which account a setup belongs to; a shared setup shows on every account. */
 @Value
-@Accessors(fluent = true)
 public class Owner {
     String accountKey;
 

@@ -1,7 +1,6 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
@@ -9,7 +8,6 @@ import java.util.Objects;
 
 /** What the player is wearing and carrying at one moment. */
 @Value
-@Accessors(fluent = true)
 public class Loadout {
     Map<EquipmentSlot, SetupItem> equipment;
     ItemGrid inventory;

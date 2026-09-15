@@ -4,7 +4,6 @@ import dev.dutchy.runelite.gear.layout.BankPlacement;
 import dev.dutchy.runelite.gear.layout.BankSide;
 import dev.dutchy.runelite.gear.layout.LayoutLabel;
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +12,6 @@ import java.util.stream.Collectors;
 
 /** What a setup asks the bank to show. Placement coordinates are per side, not absolute bank slots. */
 @Value
-@Accessors(fluent = true)
 public class BankLayout {
     List<BankPlacement> placements;
     List<LayoutLabel> labels;

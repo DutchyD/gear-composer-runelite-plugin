@@ -1,13 +1,11 @@
 package dev.dutchy.runelite.gear.bank;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 
 import java.util.Objects;
 
 /** A slot as it is currently drawn in the bank: the plan behind it and where the drawn item really sits. */
 @Value
-@Accessors(fluent = true)
 public class DrawnSlot {
     BankSlotPlan plan;
     int bankIndex;

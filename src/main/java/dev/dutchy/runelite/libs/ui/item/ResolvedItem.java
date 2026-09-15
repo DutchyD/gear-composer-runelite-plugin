@@ -1,11 +1,9 @@
 package dev.dutchy.runelite.libs.ui.item;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 import java.util.Objects;
 
 @Value
-@Accessors(fluent = true)
 public class ResolvedItem {
     ItemId id;
     String name;

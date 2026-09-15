@@ -1,11 +1,9 @@
 package dev.dutchy.runelite.gear.content;
 
 import lombok.Value;
-import lombok.experimental.Accessors;
 import java.util.Objects;
 
 @Value
-@Accessors(fluent = true)
 public class BankContent implements SetupContent {
     ItemGrid left;
     ItemGrid right;

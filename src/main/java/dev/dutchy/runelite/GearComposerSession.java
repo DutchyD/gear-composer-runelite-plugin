@@ -120,7 +120,6 @@ final class GearComposerSession {
     }
 
     void stop() {
-        panel.endGuide();
         itemIndexWarmUp.stop();
         if (autoSave != null) {
             autoSave.stop();

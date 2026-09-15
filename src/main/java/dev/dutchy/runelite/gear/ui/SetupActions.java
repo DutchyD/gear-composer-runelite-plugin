@@ -37,13 +37,4 @@ interface SetupActions {
 
     /** Opens the key capture for the setup's hotkey. */
     void chooseHotkey(GearSetup setup);
-
-    /** Puts a share code for the setup on the clipboard. */
-    void copyShareCode(GearSetup setup);
-
-    /** Opens the slot-by-slot comparison page for the setup. */
-    void compare(GearSetup setup);
-
-    /** Opens the page that renders the setup as an image or text. */
-    void share(GearSetup setup);
 }
