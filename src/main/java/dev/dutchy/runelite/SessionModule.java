@@ -58,6 +58,7 @@ final class SessionModule extends AbstractModule {
         bind(BankTabWatch.class).in(Singleton.class);
         bind(BankTabSizes.class).in(Singleton.class);
         bind(BankSearchWatch.class).in(Singleton.class);
+        bind(BankTagWatch.class).in(Singleton.class);
         bind(WithdrawMenuSwapper.class).in(Singleton.class);
         bind(VariantSwitchMenu.class).in(Singleton.class);
         bind(PageParts.class).in(Singleton.class);

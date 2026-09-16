@@ -69,7 +69,7 @@ final class GearComposerSession {
                         RuneLiteSpellbook spellbook, RuneLiteQuickPrayers quickPrayers, ActiveSetup activeSetup,
                         SetupHotkeys hotkeys, ActivationToast toast, BankTitle title, BankSlotOverlay slotOverlay,
                         NoteToggleOverlay noteOverlay, BankLabelOverlay labelOverlay, BankTabWatch tabWatch, BankTabSizes tabSizes,
-                        BankSearchWatch searchWatch, WithdrawMenuSwapper withdrawSwapper, VariantSwitchMenu variantMenu,
+                        BankSearchWatch searchWatch, BankTagWatch bankTagWatch, WithdrawMenuSwapper withdrawSwapper, VariantSwitchMenu variantMenu,
                         SetupActivator activator, GearSetupPanel panel) {
         this.eventBus = Objects.requireNonNull(eventBus, "eventBus");
         this.overlayManager = Objects.requireNonNull(overlayManager, "overlayManager");
@@ -93,7 +93,8 @@ final class GearComposerSession {
         this.panel = Objects.requireNonNull(panel, "panel");
         this.overlays = List.of(toast, slotOverlay, noteOverlay, labelOverlay);
         this.activator = Objects.requireNonNull(activator, "activator");
-        this.subscribers = List.of(screen, account, spellbook, quickPrayers, title, tabWatch, tabSizes, searchWatch, withdrawSwapper, variantMenu, this);
+        this.subscribers = List.of(screen, account, spellbook, quickPrayers, title, tabWatch, tabSizes, searchWatch, bankTagWatch,
+                withdrawSwapper, variantMenu, this);
     }
 
     void start() {

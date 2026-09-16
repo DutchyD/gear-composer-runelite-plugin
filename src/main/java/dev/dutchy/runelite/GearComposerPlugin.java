@@ -4,9 +4,7 @@ import com.google.inject.Binder;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 import dev.dutchy.runelite.gear.Dispatch;
-import dev.dutchy.runelite.gear.GearSetup;
 import dev.dutchy.runelite.gear.GearSetupBook;
-import dev.dutchy.runelite.gear.SetupId;
 import dev.dutchy.runelite.gear.account.AccountDirectory;
 import dev.dutchy.runelite.gear.account.ConfigAccountDirectory;
 import dev.dutchy.runelite.gear.account.CurrentAccount;
@@ -29,15 +27,16 @@ import lombok.extern.slf4j.Slf4j;
 import net.runelite.client.RuneLite;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.plugins.Plugin;
+import net.runelite.client.plugins.PluginDependency;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.banktags.BankTagsPlugin;
 
 import javax.inject.Inject;
 import java.nio.file.Path;
 import java.time.Clock;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
+@PluginDependency(BankTagsPlugin.class)
 @PluginDescriptor(
         name = "Gear Composer",
         description = "Lays out your bank in the gear setup you request",
@@ -77,6 +76,7 @@ public class GearComposerPlugin extends Plugin {
         binder.install(new ItemUiModule());
         binder.bind(BankContents.class).to(RuneLiteBankContents.class);
         binder.bind(BankItemNames.class).to(RuneLiteBankItemNames.class);
+        binder.bind(BankTagState.class).to(RuneLiteBankTags.class);
         binder.bind(BankLayoutApplier.class).to(BankDisplay.class);
         binder.bind(DrawnBankSource.class).to(BankDisplay.class);
         binder.bind(SlotChooser.class).to(BankDisplay.class);
