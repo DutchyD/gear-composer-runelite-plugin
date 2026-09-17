@@ -32,7 +32,8 @@ public final class NoteToggleOverlay extends Overlay {
     @Override
     public Dimension render(Graphics2D graphics) {
         DrawnBank shown = bank.drawnBank();
-        if (!shown.active() || !shown.wantsNotes() || client.getVarbitValue(VarbitID.BANK_WITHDRAWNOTES) == 1) {
+        if (!shown.active() || !shown.wantsNotes() || client.getVarbitValue(VarbitID.BANK_WITHDRAWNOTES) == 1
+                || GroupStorage.isOpen(client)) {
             return null;
         }
         Widget toggle = client.getWidget(InterfaceID.Bankmain.NOTE);
