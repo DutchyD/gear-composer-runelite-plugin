@@ -24,15 +24,17 @@ public final class SetupActivator implements GearSetupBookListener {
     private final ActiveSetup active;
     private final BankLayoutPlanner planner;
     private final BankLayoutApplier bank;
+    private final BankTagState tags;
     private final List<Runnable> listeners = new CopyOnWriteArrayList<>();
     private BankLayout shown;
 
     @Inject
-    public SetupActivator(GearSetupBook book, ActiveSetup active, BankLayoutPlanner planner, BankLayoutApplier bank) {
+    public SetupActivator(GearSetupBook book, ActiveSetup active, BankLayoutPlanner planner, BankLayoutApplier bank, BankTagState tags) {
         this.book = Objects.requireNonNull(book, "book");
         this.active = Objects.requireNonNull(active, "active");
         this.planner = Objects.requireNonNull(planner, "planner");
         this.bank = Objects.requireNonNull(bank, "bank");
+        this.tags = Objects.requireNonNull(tags, "tags");
         book.addChangeListener(this);
     }
 
@@ -127,6 +129,9 @@ public final class SetupActivator implements GearSetupBookListener {
     }
 
     private void apply(GearSetup setup) {
+        if (tags.isTagOpen()) {
+            tags.closeTag();
+        }
         shown = layoutFor(setup);
         bank.apply(shown);
     }

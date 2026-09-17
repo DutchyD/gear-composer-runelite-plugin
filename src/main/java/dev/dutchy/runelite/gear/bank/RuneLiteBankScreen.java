@@ -358,7 +358,8 @@ public final class RuneLiteBankScreen implements BankScreen {
         }
         Widget widget = event.getMenuEntry().getWidget();
         ItemContainer bank = client.getItemContainer(InventoryID.BANK);
-        if (widget == null || bank == null) {
+        // The strip sits in the item container too, and its widgets hold no item; an empty bank slot answers to -1.
+        if (widget == null || bank == null || widget.getItemId() <= -1) {
             return;
         }
         int realSlot = bank.find(widget.getItemId());

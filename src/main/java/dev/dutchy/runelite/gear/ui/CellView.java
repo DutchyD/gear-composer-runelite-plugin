@@ -76,20 +76,20 @@ final class CellView extends JPanel {
         return menu.danger(EMPTY_CELL, () -> actions.emptyCell(ref));
     }
 
+    /** The cell's name over where it sits: the sidebar is too narrow to hold both on one line. */
     private JPanel heading() {
         JPanel row = Ui.panel(new BorderLayout(Ui.SMALL_GAP, 0));
         row.setBorder(BorderFactory.createEmptyBorder(0, 2, 2, 0));
         JLabel title = Ui.caption(cell.label());
         JLabel where = Ui.hint(ref.describe() + (cell.isBlank() ? "" : " · " + cell.kind().displayName()));
-        JPanel text = Ui.panel(new FlowLayout(FlowLayout.LEFT, Ui.SMALL_GAP, 0));
-        text.add(title);
-        text.add(where);
-        row.add(text, BorderLayout.CENTER);
+        row.add(Ui.column(0, title, where), BorderLayout.CENTER);
         if (!cell.isBlank()) {
             FlatButton more = Help.describe(new FlatButton(ActionIcon.MORE, "More for " + cell.label(), () -> {
             }), HelpTopic.CELL_MENU);
             more.addActionListener(e -> contextMenu().show(more, 0, more.getHeight()));
-            row.add(more, BorderLayout.EAST);
+            JPanel side = Ui.panel(new BorderLayout());
+            side.add(more, BorderLayout.NORTH);
+            row.add(side, BorderLayout.EAST);
         }
         row.setMaximumSize(new Dimension(Integer.MAX_VALUE, row.getPreferredSize().height));
         return row;

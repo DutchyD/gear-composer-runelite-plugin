@@ -39,7 +39,7 @@ public final class BankLabelOverlay extends Overlay {
     @Override
     public Dimension render(Graphics2D graphics) {
         DrawnBank shown = bank.drawnBank();
-        if (!shown.active()) {
+        if (!shown.active() || GroupStorage.isOpen(client)) {
             return null;
         }
         List<LayoutLabel> labels = shown.labels();

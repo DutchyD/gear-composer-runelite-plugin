@@ -57,7 +57,7 @@ public final class BankSlotOverlay extends WidgetItemOverlay {
     @Override
     public void renderItemOverlay(Graphics2D graphics, int itemId, WidgetItem item) {
         DrawnBank shown = bank.drawnBank();
-        if (!shown.active() || item.getWidget() == null) {
+        if (!shown.active() || item.getWidget() == null || GroupStorage.isOpen(client)) {
             return;
         }
         Optional<DrawnSlot> drawn = shown.at(item.getWidget().getIndex());
